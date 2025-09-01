@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+</head>
+<body>
+     <form method="post">
+        {% csrf_token %}
+        <center>
+        <h2 style="font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-style: oblique;">REGISTERATION</h2>
+        PharmacyName : 
+        <input type="text" name="PharmacyName"/>
+        <br/>
+        <br/>
+        Username : 
+        <input type="text" name="Username"/>
+        <br/>
+        <br/>
+        E-mail : 
+        <input type="text" name="Email"/>
+        <br/>
+        <br/>
+       
+        Password :
+        <input type="text" name="Password"/>
+        <br/>
+        <br/>
+
+        Contact no  : 
+        <input type="text" name="ContactNo"/>
+        <br/>
+        <br/>
+        Address :
+        <input type="text" name="Address"/>
+        <br/>
+        <br/>
+        <input type="submit" style="padding: 10px;margin: 10px;background-color:azure; color: brown;" value="REGISTER"/>
+    </center>
+    </form>
+</body>
+</html>
