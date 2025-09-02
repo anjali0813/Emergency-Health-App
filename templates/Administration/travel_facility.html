@@ -10,32 +10,22 @@
     <h3>TRAVEL FACILITY</h3>
     <table border="1">
         <tr>
-            <th>Date</th>
             <th>Name</th>
-            <th>Vehicle</th>
+            <th>Hsptl_Name</th>
             <th>Vehicle no</th>
-            <th>Availability</th>
-            <th>Contact no</th>
+            <th>Contact_no</th>
         </tr>
+        {%  for i in vehicles %}
         <tr>
-            <td><input type="date"/></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td><input type="button" value="YES"/></td>
-            <td></td>
+            <td>{{i.Driver_name}}</td>
+            <td>{{ i.HOSPITAL.HospitalName }}</td>
+            <td>{{i.Vehicle_no}}</td>
+            <td>{{i.Contact_no}}</td>
         </tr>
-        <tr>
-            <td><input type="date"/></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td><input type="button" value="NO"/></td>
-            <td></td>
-        </tr>
+        {% endfor %}
     </table>
     <br/>
-    <input type="button" value="ADD" style="margin-left: 350px;"/>
+    <a href="/Vehicle"><input type="button" value="ADD" style="margin-left: 350px;"/></a>
 </center> 
 </body>
 </html>

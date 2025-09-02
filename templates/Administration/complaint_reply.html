@@ -17,14 +17,16 @@
             <th>Complaint</th>
             <th>Reply</th>
         </tr>
+        {% for i in complaints %}
         <tr>
-            <td><input type="date"/></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td><a href="/reply"></a>reply</td>
+            <td>{{i.Date}}</td>
+            <td>{{ i.USER.Name }}</td>
+            <td>{{i.USER.Email}}</td>
+            <td>{{i.USER.Contact_no}}</td>
+            <td>{{i.Complaint}}</td>
+            <td><a href="/Reply"></a></td>
         </tr>
+        {% endfor %}
     </table>
 </center>  
 </body>

@@ -33,6 +33,7 @@ urlpatterns = [
     path('Accept_P/<int:id>',AcceptPharmacy.as_view(),name="AcceptPharmacy"),
     path('Reject_P/<int:id>',RejectPharmacy.as_view(),name="RejectPharmacy"),
     path('TravelFacility',TravelFacility.as_view(),name="TravelFacility"),
+    path('Vehicle',Vehicle.as_view(),name="Vehicle"),
     # ////////////////////////////////////// HOSPITAL /////////////////////////////////////////////////
     path('Homepage_hsptl',Homepage_hsptl.as_view(),name="Homepage"),
     path('Register_hsptl',Register_hsptl.as_view(),name="Register"),

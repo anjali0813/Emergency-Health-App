@@ -32,7 +32,9 @@ class Homepage(View):
     
 class ComplaintReply(View):
     def get(self, request):
-        return render(request, "Administration/complaint_reply.html")
+        c=ComplaintModel.objects.all()
+        return render(request, "Administration/complaint_reply.html",{'complaints':c})
+   
     
 class VerifyHospital(View):
     def get(self, request):
@@ -53,11 +55,10 @@ class RejectHospital(View):
         c.LOGIN.save()
         return HttpResponse('''<script>alert("Not verified");window.location=("/VerifyHospital")</script>''')
 
-
-    
 class ViewUsers(View):
     def get(self, request):
-        return render(request, "Administration/view_users.html")
+        c=UserModel.objects.all()
+        return render(request, "Administration/view_users.html",{'users':c})
     
 class VerifyPharmacy(View):
     def get(self, request):
@@ -80,8 +81,19 @@ class RejectPharmacy(View):
 
 class TravelFacility(View):
     def get(self, request):
-        return render(request, "Administration/travel_facility.html")
-
+        c=AmbulanceModel.objects.all()
+        return render(request, "Administration/travel_facility.html",{'vehicles':c})
+    
+class Vehicle(View):
+    def get(self,request):
+        obj = HospitalModel.objects.all()
+        return render(request,"Administration/vehicle.html", {'val': obj})
+    
+    def post(self,request):
+        form=AmbulanceForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponse('''<script>alert("Successfully registered");window.location=("/")</script>''')
 
     # /////////////////////////////////////////// HOSPITAL ///////////////////////////////////////////
     
@@ -113,7 +125,8 @@ class BookAppointment(View):
     
 class ReviewRate(View):
     def get(self, request):
-        return render(request, "hospital/review_rate.html")
+        c=ReviewModel.objects.all()
+        return render(request, "hospital/review_rate.html",{'reviews':c})
     
 class AddManageDoctors(View):
     def get(self, request):
@@ -122,7 +135,7 @@ class AddManageDoctors(View):
 
 class AddBed(View):
     def get(self, request):
-        return render(request, "hospital/bed_booking.html")
+        return render(request, "hospital/add_bed.html")
     
     #////////////////////////////////// PHARMACY ////////////////////////////
  

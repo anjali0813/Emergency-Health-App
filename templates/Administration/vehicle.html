@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vehicle</title>
+</head>
+<body>
+    <center>
+    <h3>VEHICLE</h3>
+    <form method="post">
+    {% csrf_token %}
+        DriverName :
+        <input type="text" name="Driver_name"/>
+        <br/>
+        <br/>
+        HospitalName :
+        <select name="HOSPITAL">
+            {% for i in val %}
+            <option value="{{ i.id }}">{{ i.HospitalName }}</option>
+            {% endfor %}
+        </select>
+        <br/>
+        <br/>
+        Vehicle no:
+        <input type="text" name="Vehicle_no"/>
+        <br/>
+        <br/>
+        Contact_no :
+        <input type="text" name="Contact_no"/>
+        <br/>
+        <br/>
+        <input type="submit" value="SUBMIT"/>
+    </form>
+    </center>
+</body>
+</html>

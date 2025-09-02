@@ -21,7 +21,7 @@ class ComplaintForm(ModelForm):
 class AmbulanceForm(ModelForm):
     class Meta:
         model=AmbulanceModel
-        fields=['Driver_name','Vehicle','Vehicle_no','Availability','Contact_no'] 
+        fields=['Driver_name','Vehicle_no','Contact_no', 'HOSPITAL'] 
 
 class AmbulanceBookingForm(ModelForm):
     class Meta:

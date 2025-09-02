@@ -33,30 +33,28 @@ class ComplaintModel(models.Model):
     Complaint=models.CharField(max_length=50)
     Reply=models.CharField(max_length=50)
 
-
-class AmbulanceModel(models.Model):
-    Driver_name=models.CharField(max_length=50,null=True,blank=True)
-    Vehicle=models.CharField(max_length=50,null=True,blank=True)
-    Vehicle_no=models.CharField(max_length=30,null=True,blank=True)
-    Availability=models.CharField(max_length=40,null=True,blank=True)
-    Contact_no=models.BigIntegerField(null=True,blank=True)
-    created_at = models.DateField(auto_now_add=True)
-    updated_at = models.DateField(auto_now=True)
-
-
-class AmbulanceBookingModel(models.Model):
-    USER = models.ForeignKey(UserModel, on_delete=models.CASCADE, null=True, blank=True)
-    AMBULANCE = models.ForeignKey(AmbulanceModel, on_delete=models.CASCADE, null=True, blank=True)
-    Date = models.DateField(null=True, blank=True)
-    status = models.CharField(max_length=10, null=True, blank=True)
-
-
 class HospitalModel(models.Model):
     HospitalName=models.CharField(max_length=30,null=True,blank=True)
     Email=models.CharField(max_length=30,null=True,blank=True)
     Contact_no=models.BigIntegerField(null=True,blank=True)
     Address=models.CharField(max_length=30,null=True,blank=True)
     LOGIN=models.ForeignKey(LoginModel,on_delete=models.CASCADE,null=True,blank=True)
+
+
+class AmbulanceModel(models.Model):
+    Driver_name=models.CharField(max_length=50,null=True,blank=True)
+    HOSPITAL = models.ForeignKey(HospitalModel, on_delete=models.CASCADE, null=True, blank=True)
+    Vehicle_no=models.CharField(max_length=30,null=True,blank=True)
+    Contact_no=models.BigIntegerField(null=True,blank=True)
+    created_at = models.DateField(auto_now_add=True)
+    updated_at = models.DateField(auto_now=True)
+
+
+class AmbulanceBookingModel(models.Model):
+    AMBULANCE = models.ForeignKey(AmbulanceModel, on_delete=models.CASCADE, null=True, blank=True)
+    Date = models.DateField(null=True, blank=True)
+    status = models.CharField(max_length=10, null=True, blank=True)
+
 
 
 class AppointmentModel(models.Model):
@@ -70,6 +68,7 @@ class AppointmentModel(models.Model):
 
 class ReviewModel(models.Model):
     USER=models.ForeignKey(UserModel,on_delete=models.CASCADE,null=True,blank=True)
+    HOSPITAL=models.ForeignKey(HospitalModel,on_delete=models.CASCADE,null=True,blank=True)
     Date=models.DateField(auto_now_add=True, null=True,blank=True)
     Review=models.CharField(max_length=300,null=True,blank=True)
     Rating=models.FloatField(null=True,blank=True)
