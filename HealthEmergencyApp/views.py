@@ -15,10 +15,12 @@ class LoginPage(View):
         Password1=request.POST['Password']
 
         login_obj=LoginModel.objects.get(Username=Username1,Password=Password1)
+        request.session['userid']=login_obj.id
+        print(request.session['userid'])
 
         if login_obj.UserType=="admin":
             return HttpResponse('''<script>alert("admin_home");window.location=("/Homepage")</script>''')
-        elif login_obj.UserType=="hospital":
+        elif login_obj.UserType=="Hospital":
             return HttpResponse('''<script>alert("hospital_home");window.location=("/Homepage_hsptl")</script>''')
         elif login_obj.UserType=="pharmacy":
             return HttpResponse('''<script>alert("pharmacy_home");window.location=("/Homepage_phmy")</script>''')
@@ -34,6 +36,18 @@ class ComplaintReply(View):
     def get(self, request):
         c=ComplaintModel.objects.all()
         return render(request, "Administration/complaint_reply.html",{'complaints':c})
+    
+class Reply(View):
+    def get(self,request,id):
+        c=ComplaintModel.objects.get(id=id)
+        return render(request,"Administration/reply.html",{'replies':c})
+    
+    def post(self,request, id):
+        c=ComplaintModel.objects.get(id=id)
+        form = ReplyForm(request.POST, instance=c)
+        if form.is_valid():
+            form.save()
+            return HttpResponse('''<script>alert("Replied successfully");window.location=("/ComplaintReply")</script>''')
    
     
 class VerifyHospital(View):
@@ -119,9 +133,11 @@ class Homepage_hsptl(View):
     def get(self,request):
         return render(request,"hospital/homepage_hsptl.html")
     
-class BookAppointment(View):
+class ManageAppointment(View):
     def get(self, request):
-        return render(request, "hospital/book_appointments.html")
+        hsptl_obj=HospitalModel.objects.get(LOGIN_id=request.session['userid'])
+        c=AppointmentModel.objects.filter(HOSPITAL__id=hsptl_obj.id)
+        return render(request, "hospital\manage_appointments.html",{'appointments':c})
     
 class ReviewRate(View):
     def get(self, request):

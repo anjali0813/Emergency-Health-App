@@ -8,8 +8,10 @@
 <body>
     <center>
     <h3>REPLY</h3>
-    <form>
-        <textarea></textarea>
+    <form method="post">
+        {% csrf_token %} 
+        <input type="text" name="Complaint" value="{{replies.Complaint}}" readonly>
+        <textarea name="Reply"></textarea>
         <br/>
         <br/>
         <input type="submit" value="send"/>

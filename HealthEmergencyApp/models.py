@@ -30,8 +30,10 @@ class UserModel(models.Model):
 class ComplaintModel(models.Model):
     Date=models.DateField(auto_now_add=True,null=True,blank=True)
     USER=models.ForeignKey(UserModel,on_delete=models.CASCADE,null=True,blank=True)
-    Complaint=models.CharField(max_length=50)
-    Reply=models.CharField(max_length=50)
+    Complaint=models.CharField(max_length=500)
+    Reply=models.CharField(max_length=50, null=True, blank=True)
+
+
 
 class HospitalModel(models.Model):
     HospitalName=models.CharField(max_length=30,null=True,blank=True)
@@ -60,6 +62,7 @@ class AmbulanceBookingModel(models.Model):
 class AppointmentModel(models.Model):
     USER=models.ForeignKey(UserModel,on_delete=models.CASCADE,null=True,blank=True)
     HOSPITAL=models.ForeignKey(HospitalModel,on_delete=models.CASCADE,null=True,blank=True)
+    Date=models.DateField(auto_now_add=True, null=True,blank=True)
     Time=models.IntegerField(null=True,blank=True)
     Token=models.IntegerField(null=True,blank=True)
     Issue=models.CharField(max_length=50,null=True,blank=True)

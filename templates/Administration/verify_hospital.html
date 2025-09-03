@@ -22,9 +22,17 @@
             <td>{{i.Email}}</td>
             <td>{{i.Contact_no}}</td>
             <td>{{i.Address}}</td>
+            {% if i.LOGIN.UserType == "pending" %}
             <td><a href="/Accept_H/{{i.id}}">Accept</a>
                 <br/>
-            <a href="Reject_H/{{i.id}}">Reject</a></td>
+            <a href="/Reject_H/{{i.id}}">Reject</a></td>
+            {% elif i.LOGIN.UserType == "Hospital" %}
+            <td><a href="/Reject_H/{{i.id}}">Reject</a></td>
+            {% elif i.LOGIN.UserType == "Rejected" %}
+            <td><a href="/Accept_H/{{i.id}}">Accept</a></td>
+            {% else %}
+            <td>Invalid User</td>
+            {% endif %}
         </tr>
         {% endfor %}
     </table>

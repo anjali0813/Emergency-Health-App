@@ -25,6 +25,7 @@ urlpatterns = [
     path('', LoginPage.as_view(), name="LoginPage"),
     path('Homepage',Homepage.as_view(),name="Homepage"),
     path('ComplaintReply',ComplaintReply.as_view(),name="ComplaintReply"),
+    path('Reply/<int:id>',Reply.as_view(),name="Reply"),
     path('VerifyHospital',VerifyHospital.as_view(),name="VerifyHospital"),
     path('ViewUsers',ViewUsers.as_view(),name="ViewUsers"),
     path('Accept_H/<int:id>',AcceptHospital.as_view(),name="AcceptHospital"),
@@ -37,7 +38,7 @@ urlpatterns = [
     # ////////////////////////////////////// HOSPITAL /////////////////////////////////////////////////
     path('Homepage_hsptl',Homepage_hsptl.as_view(),name="Homepage"),
     path('Register_hsptl',Register_hsptl.as_view(),name="Register"),
-    path('BookAppointment',BookAppointment.as_view(),name="BookAppointment"),
+    path('ManageAppointment',ManageAppointment.as_view(),name="ManageAppointments"),
     path('ReviewRate',ReviewRate.as_view(),name="ReviewRate"),
     path('AddManageDoctors',AddManageDoctors.as_view(),name="AddManageDoctors"),
     path('AddBed',AddBed.as_view(),name="AddBed"),

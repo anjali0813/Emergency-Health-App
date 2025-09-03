@@ -24,7 +24,11 @@
             <td>{{i.USER.Email}}</td>
             <td>{{i.USER.Contact_no}}</td>
             <td>{{i.Complaint}}</td>
-            <td><a href="/Reply"></a></td>
+            {% if i.Reply %}
+            <td>{{i.Reply}}</td>
+            {% else %}
+            <td><a href="/Reply/{{ i.id }}">reply</a></td>
+            {% endif %}
         </tr>
         {% endfor %}
     </table>

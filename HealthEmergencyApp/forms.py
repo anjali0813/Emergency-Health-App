@@ -18,6 +18,11 @@ class ComplaintForm(ModelForm):
         model=ComplaintModel
         fields=['Complaint','Reply']
 
+class ReplyForm(ModelForm):
+    class Meta:
+        model=ComplaintModel
+        fields=['Complaint','Reply']        
+
 class AmbulanceForm(ModelForm):
     class Meta:
         model=AmbulanceModel
