@@ -53,6 +53,10 @@ class DoctorForm(ModelForm):
         model=DoctorModel
         fields=['DoctorName','Place','Department','Contact_no','Photo']
 
+class ManageDoctorForm(ModelForm):
+    class Meta:
+        model=DoctorModel
+        fields=['DoctorName','Place','Department','Contact_no','Photo']
 class BedForm(ModelForm):
     class Meta:
         model=BedModel

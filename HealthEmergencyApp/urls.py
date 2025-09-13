@@ -41,6 +41,7 @@ urlpatterns = [
     path('ManageAppointment',ManageAppointment.as_view(),name="ManageAppointments"),
     path('ReviewRate',ReviewRate.as_view(),name="ReviewRate"),
     path('AddManageDoctors',AddManageDoctors.as_view(),name="AddManageDoctors"),
+    path('ViewDoctor',ViewDoctor.as_view(),name="ViewDoctor"),
     path('AddBed',AddBed.as_view(),name="AddBed"),
     #////////////////////////////////////////// PHARMACY ////////////////////////////////////////
     path('Register_phmy',Register_phmy.as_view(),name="Register"),
