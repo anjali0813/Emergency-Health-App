@@ -43,6 +43,7 @@ urlpatterns = [
     path('AddManageDoctors',AddManageDoctors.as_view(),name="AddManageDoctors"),
     path('ViewDoctor',ViewDoctor.as_view(),name="ViewDoctor"),
     path('AddBed',AddBed.as_view(),name="AddBed"),
+    path('editdoctor/<int:id>',editdoctor.as_view(),name="editdoctor"),
     #////////////////////////////////////////// PHARMACY ////////////////////////////////////////
     path('Register_phmy',Register_phmy.as_view(),name="Register"),
     path('Homepage_phmy',Homepage_phmy.as_view(),name="Homepage"),

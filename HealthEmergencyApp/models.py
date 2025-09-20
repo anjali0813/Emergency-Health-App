@@ -82,7 +82,7 @@ class DoctorModel(models.Model):
     DoctorName=models.CharField(max_length=30,null=True,blank=True)
     Place=models.CharField(max_length=40,null=True,blank=True)
     Department=models.CharField(max_length=30,null=True,blank=True)
-    Contact_no=models.IntegerField(null=True,blank=True)
+    contact_no=models.IntegerField(null=True,blank=True)
     Photo = models.FileField(null=True, blank=True)
 
 

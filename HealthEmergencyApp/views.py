@@ -156,14 +156,18 @@ class AddManageDoctors(View):
         f.save()
         return HttpResponse('''<script>alert("Successfully registered");window.location=("/")</script>''')
 
-
 class AddBed(View):
     def get(self, request):
         return render(request, "hospital/add_bed.html")
     
 class ViewDoctor(View):
     def get(self, request):
-        return render(request, "hospital/doctors.html")
+        c = DoctorModel.objects.all()
+        return render(request, "hospital/doctors.html",{'doctors':c})
+class editdoctor(View):
+    def get(self,request,id):
+        c=DoctorModel.objects.get(id=id)
+        return render(request,"hospital/Editdoctor.html",{'doctors':c})
     
     #////////////////////////////////// PHARMACY ////////////////////////////
  

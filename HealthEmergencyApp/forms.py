@@ -51,12 +51,12 @@ class ReviewForm(ModelForm):
 class DoctorForm(ModelForm):
     class Meta:
         model=DoctorModel
-        fields=['DoctorName','Place','Department','Contact_no','Photo']
+        fields=['DoctorName','Place','Department','contact_no','Photo']
 
 class ManageDoctorForm(ModelForm):
     class Meta:
         model=DoctorModel
-        fields=['DoctorName','Place','Department','Contact_no','Photo']
+        fields=['DoctorName','Place','Department','contact_no','Photo']
 class BedForm(ModelForm):
     class Meta:
         model=BedModel
