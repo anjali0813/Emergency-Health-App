@@ -87,8 +87,8 @@ class DoctorModel(models.Model):
 
 
 class BedModel(models.Model):
-    RoomNo=models.IntegerField(null=True,blank=True)
-    Availability=models.CharField(max_length=30,null=True,blank=True)
+    count=models.IntegerField(null=True,blank=True)
+    ward=models.CharField(max_length=30,null=True,blank=True)
     HOSPITAL=models.ForeignKey(HospitalModel,on_delete=models.CASCADE,null=True,blank=True)
 
 

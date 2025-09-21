@@ -158,7 +158,8 @@ class AddManageDoctors(View):
 
 class AddBed(View):
     def get(self, request):
-        return render(request, "hospital/add_bed.html")
+        c=BedModel.objects.all()
+        return render(request, "hospital/add_bed.html",{'beds':c})
     
 class ViewDoctor(View):
     def get(self, request):
@@ -168,6 +169,49 @@ class editdoctor(View):
     def get(self,request,id):
         c=DoctorModel.objects.get(id=id)
         return render(request,"hospital/Editdoctor.html",{'doctors':c})
+    def post(self,request, id):
+        c=DoctorModel.objects.get(id=id)
+        form=ManageDoctorForm(request.POST, instance=c)
+        if form.is_valid():
+            f=form.save(commit=False)
+        f.save()
+        return HttpResponse('''<script>alert("Successfully registered");window.location=("/ViewDoctor")</script>''')
+    
+class deletedoctor(View):
+    def get(self,request,id):
+        c=DoctorModel.objects.get(id=id)
+        c.delete()
+        return HttpResponse('''<script>alert("Successfully registered");window.location=("/ViewDoctor")</script>''')
+    
+class managebed(View):
+    def get(self, request):
+        return render(request, "hospital/managebed.html")
+    def post(self,request):
+        form=BedForm(request.POST)
+        c = HospitalModel.objects.get(LOGIN__id = request.session['userid'])
+        if form.is_valid():
+            f=form.save(commit=False)
+            f.HOSPITAL = c
+        f.save()
+        return HttpResponse('''<script>alert("Successfully registered");window.location="/AddBed"</script>''')
+class deletebed(View):
+    def get(self,request,id):
+        c=BedModel.objects.get(id=id)
+        c.delete()
+        return HttpResponse('''<script>alert("Successfully registered");window.location=("/AddBed")</script>''')
+class editbed(View):
+    def get(self,request,id):
+        c=BedModel.objects.get(id=id)
+        return render(request,"hospital/editbed.html",{'beds':c})
+    def post(self,request, id):
+        c=BedModel.objects.get(id=id)
+        form=BedForm(request.POST, instance=c)
+        if form.is_valid():
+            f=form.save(commit=False)
+        f.save()
+        return HttpResponse('''<script>alert("Successfully registered");window.location=("/AddBed")</script>''') 
+    
+    
     
     #////////////////////////////////// PHARMACY ////////////////////////////
  

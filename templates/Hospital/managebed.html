@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor</title>
+</head>
+<body>
+    <form method="post">
+        {% csrf_token %}
+        <center>
+        <h2 style="font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-style: oblique;">DOCTOR'S INFO</h2>
+        Bedcount: 
+        <input type="text" name="count"/>
+        <br/>
+        <br/>
+       Room/ward no :
+        <input type="text" name="ward"/>
+        <br/>
+        <br/>
+        <input type="submit" style="padding: 10px;margin: 10px;background-color:azure; color: brown;" value="SUBMIT"/>
+    </center>
+    </form>
+</body>
+</html>

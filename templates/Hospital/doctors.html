@@ -85,7 +85,7 @@
                 <td>{{ i.contact_no }}</td>
                 <td>
                     <a href="/editdoctor/{{ i.id }}" class="action-btn edit-btn">Edit</a>
-                    <a href="/delete/{{ i.id }}" class="action-btn delete-btn" onClick="return confirm('Are you sure you want to delete this doctor?');">Delete</a>
+                    <a href="/deletedoctor/{{ i.id }}" class="action-btn delete-btn" onClick="return confirm('Are you sure you want to delete this doctor?');">Delete</a>
                 </td>
             </tr>
             {% endfor %}

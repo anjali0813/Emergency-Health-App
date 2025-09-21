@@ -60,7 +60,7 @@ class ManageDoctorForm(ModelForm):
 class BedForm(ModelForm):
     class Meta:
         model=BedModel
-        fields=['RoomNo','Availability']
+        fields=['count','ward']
 
 class BedBookingForm(ModelForm):
     class Meta:

@@ -10,22 +10,29 @@
     <h3>ADD BED</h3>
     <table border="1">
         <tr>
-            <th>Date</th>
-            <th>Hospital name</th>
+            <th>Si/no</th>
+            <th>Hospial name</th>
             <th>Hospital place</th>
-            <th>Room/ward no</th>
-            <th>Availability</th>
+            <th>count</th>
+            <th>ward</th>
+            <th>action</th>
         </tr>
-        {% for in beds %}
+        {% for i in beds %}
         <tr>
 
-            <td>{{i.Date}}</td>
-            <td>{{i.HospitalName}}</td>
-            <td>{{i.}}</td>
-            <td></td>
-            <td></td>
+            <td>{{forloop.counter}}</td>
+            <td>{{i.HOSPITAL.HospitalName}}</td>
+            <td>{{i.HOSPITAL.Address}}</td>
+            <td>{{i.count}}</td>
+            <td>{{i.ward}}</td>
+            <td>
+            <a href="/editbed/{{ i.id }}" class="action-btn edit-btn">Edit</a>
+            <a href="/deletebed/{{ i.id }}" class="action-btn delete-btn" onClick="return confirm('Are you sure you want to delete this bed?');">Delete</a>
+            </td>
         </tr>
+        {% endfor %}
     </table>
+     <a href="/managebed" style="margin-left: 350px;" class="action-btn">ADD</a>
 </center> 
 </body>
 </html>
