@@ -13,11 +13,16 @@
                 <th>User</th>
                 <th>Date</th>
                 <th>Prescription</th>
-                <th>Description</th>
-                <th>Status</th>
+                <th>File</th>
             </tr>
+            {% for i in prescriptions %}
             <tr>
+                <th>{{i.USER.Name}}</th>
+                <th>{{i.Date}}</th>
+                <th>{{i.Prescription}}</th>
+                <th><a href="{{i.file.url}}"  download>View</a></th>
             </tr>
+            {%endfor%}
         <br/>
         <a href="/AddPrescription" style="margin-left: 350px;" class="action-btn">ADD NEW</a>
 

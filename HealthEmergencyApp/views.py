@@ -217,12 +217,21 @@ class editbed(View):
 class AddManagePrescription(View):
     def get(self,request):
         c=PrescriptionModel.objects.all()
-        return render(request,"Hospital/add_manage_prescription.html")
+        return render(request,"Hospital/add_manage_prescription.html",{'prescriptions':c})
     
 
 class AddPrescription(View):
     def get(self,request):
-        return render(request,"Hospital\prescription.html")   
+        c = UserModel.objects.all()
+        return render(request,"Hospital\prescription.html",{'user':c})   
+    def post(self,request):
+        c=HospitalModel.objects.get(LOGIN__id=request.session['userid'])
+        d=AddManagePrescriptionForm(request.POST,request.FILES)
+        if d.is_valid():
+            reg=d.save(commit=False)
+            reg.HOSPITAL = c
+            reg.save()
+            return HttpResponse('''<script>alert("Successfully added");window.location=("/add_manage_prescription")</script>''')
 
     #////////////////////////////////// PHARMACY ////////////////////////////
 class addequipment(View):

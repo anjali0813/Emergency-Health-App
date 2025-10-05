@@ -9,22 +9,23 @@
 <body>PRESCRIPTION</h3>
     <br>
     <br>
-        <form>
+        <form method="post" enctype="multipart/form-data">
+            {%csrf_token%}
             User :
-            <select name="User">
+            <select name="USER">
+                
             <option value="null">-- Please select the User --</option>
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
+            {% for i in user %}
+        <option value="{{i.id}}">{{i.Name}}</option>
+        {% endfor %}
+        
         </select>
         <br>
         <br>
         Prescription :
         <input type="text" name="Prescription"/>
         <br>
-        <input type="file"/>
+        <input type="file" name="file"/>
         <br>
         <br>
         <input type="submit" value="SUBMIT"/>

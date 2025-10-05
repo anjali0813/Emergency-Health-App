@@ -6,7 +6,8 @@
     <title>Doctor</title>
 </head>
 <body>
-    <form>
+    <form method="post">
+        {%csrf_token%} 
         <center>
         <h2 style="font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-style: oblique;">DOCTOR'S INFO</h2>
         Doctor Name : 
@@ -33,7 +34,7 @@
         <input type="text" name="contact_no"/>
         <br/>
         <br/>
-        <input type="button" style="padding: 10px;margin: 10px;background-color:azure; color: brown;" value="SUBMIT"/>
+        <input type="submit" style="padding: 10px;margin: 10px;background-color:azure; color: brown;" value="SUBMIT"/>
     </center>
     </form>
 </body>

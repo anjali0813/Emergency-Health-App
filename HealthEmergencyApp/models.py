@@ -90,9 +90,8 @@ class PrescriptionModel(models.Model):
     USER=models.ForeignKey(UserModel,on_delete=models.CASCADE,null=True,blank=True)
     Date=models.DateField(auto_now_add=True, null=True,blank=True)
     HOSPITAL=models.ForeignKey(HospitalModel,on_delete=models.CASCADE,null=True,blank=True)
-    Prescription=models.FileField(null=True,blank=True)
-    Description=models.CharField(max_length=500,null=True,blank=True)
-    Status=models.CharField(max_length=30,null=True,blank=True)
+    Prescription=models.CharField(max_length=300,null=True,blank=True)
+    file = models.FileField(upload_to='prescription',null=True,blank=True)
 
 class BedModel(models.Model):
     count=models.IntegerField(null=True,blank=True)

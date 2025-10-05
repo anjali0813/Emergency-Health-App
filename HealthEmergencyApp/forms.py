@@ -61,7 +61,7 @@ class ManageDoctorForm(ModelForm):
 class AddManagePrescriptionForm(ModelForm):
     class Meta:
         model=PrescriptionModel
-        fields=['Prescription','Status']
+        fields=['Prescription','file', 'USER']
 
 class BedForm(ModelForm):
     class Meta:

@@ -24,10 +24,9 @@
             <td>{{i.PRESCRIPTION.USER.Dob}}</td>
             <td><a href="{{i.PRESCRIPTION.Prescription.url}}" download>download</a></td>
             <td>{{i.PRESCRIPTION.Description}}</td>
-            <td>
         {% if i.Status == "pending" %}
             <a href="/Accept_B/{{i.id}}">Accept</a><br/>
-            <a href="/Reject_B/{{i.id}}">Reject</a></td>
+            <a href="/Reject_B/{{i.id}}">Reject</a>
         {% elif i.Status == "Booked" %}
             <td><a href="/Reject_B/{{i.id}}">Reject</a></td>
         {% elif i.Status == "Rejected" %}
