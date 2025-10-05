@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>equipments</title>
+</head>
+<body>
+  
+    <center>
+        <h3>PHARMACY EQUIPMENTS</h3>
+    <table border="1">
+        <tr>
+            <th>Date</th>
+            <th>medicine name</th>
+            <th>manufactured date</th>
+            <th>ExpairyDate</th>
+            <th>medicine description</th>
+            <th>Image</th>
+        </tr>
+        {% for i in equipments %}
+        <tr>
+            <td>{{i.created_at}}</td>
+            <td>{{i.MedicineName}}</td>
+            <td>{{i.ManufacturingDate}}</td>
+            <td>{{i.ExpiryDate}}</td>
+            <td>{{i.MedicineDescription}}</td>
+            <td><img src="{{i.Photo.url}}" alt="{{i.MedicineName}}"></td>
+        </tr>
+         {% endfor %}
+    </table>
+    <br/>
+    <a href="/addequipment" style="margin-left: 350px;" class="action-btn">ADD</a>
+     </center>
+
+</body>
+</html>

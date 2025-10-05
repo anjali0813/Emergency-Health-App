@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>booking</title>
+</head>
+<body>
+    <center>
+        <h3>Booking</h3>
+    <table border="1">
+        <tr>
+            <th>Date</th>
+            <th>Name</th>
+            <th>DOB</th>
+            <th>Prescription</th>
+            <th>Description</th>
+            <th>Action</th>
+        </tr>
+        {% for i in pharmacybooking %}
+        <tr>
+            <td>{{i.Date}}</td>
+            <td>{{i.PRESCRIPTION.USER.Name}}</td>
+            <td>{{i.PRESCRIPTION.USER.Dob}}</td>
+            <td><a href="{{i.PRESCRIPTION.Prescription.url}}" download>download</a></td>
+            <td>{{i.PRESCRIPTION.Description}}</td>
+            <td>
+        {% if i.Status == "pending" %}
+            <a href="/Accept_B/{{i.id}}">Accept</a><br/>
+            <a href="/Reject_B/{{i.id}}">Reject</a></td>
+        {% elif i.Status == "Booked" %}
+            <td><a href="/Reject_B/{{i.id}}">Reject</a></td>
+        {% elif i.Status == "Rejected" %}
+            <td><a href="/Accept_B/{{i.id}}">Accept</a></td>
+        {% else %}
+        {% endif %}
+        </tr>
+        {% endfor %}
+    </table>
+    </center>
+</body>
+</html>

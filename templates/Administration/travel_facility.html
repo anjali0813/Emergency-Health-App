@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Facility</title>
+</head>
+<body>
+   <center>
+    <h3>TRAVEL FACILITY</h3>
+    <table border="1">
+        <tr>
+            <th>Name</th>
+            <th>Hsptl_Name</th>
+            <th>Vehicle no</th>
+            <th>Contact_no</th>
+        </tr>
+        {%  for i in vehicles %}
+        <tr>
+            <td>{{i.Driver_name}}</td>
+            <td>{{ i.HOSPITAL.HospitalName }}</td>
+            <td>{{i.Vehicle_no}}</td>
+            <td>{{i.Contact_no}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br/>
+    <a href="/Vehicle"><input type="button" value="ADD" style="margin-left: 350px;"/></a>
+</center> 
+</body>
+</html>

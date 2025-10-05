@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctor</title>
+</head>
+<body>
+    <form method="post">
+        {% csrf_token %}
+        <center>
+        <h2 style="font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-style: oblique;">DOCTOR'S INFO</h2>
+        Doctor Name : 
+        <input type="text" name="DoctorName" value="{{doctors.DoctorName}}"/>
+        <br/>
+        <br/>
+       Doctor place :
+        <input type="text" name="Place" value="{{doctors.Place}}"/>
+        <br/>
+        <br/>
+        Department :
+        <select name="Department" value="{{doctors.Department}}">
+            <option value="null">-- please select the department --</option>
+        <option value="orthologist" {% if doctors.Department == "orthologist" %} selected {% endif %}>orthologist</option>
+        <option value="physician" {% if doctors.Department == "physician" %} selected {% endif %}>physician</option>
+        <option value="gynacologist" {% if doctors.Department == "gynacologist" %} selected {% endif %}>gynacologist</option>
+        <option value="neurology" {% if doctors.Department == "neurology" %} selected {% endif %}>neurology</option>
+        <option value="dermatology" {% if doctors.Department == "dermatology" %} selected {% endif %}>dermatology</option>
+        <option value="cardiologist" {% if doctors.Department == "cardiologist" %} selected {% endif %}>cardiologist</option>
+        <option value="gastroentrology" {% if doctors.Department == "gastroentrology" %} selected {% endif %}>gastroentrology</option>
+        <option value="oncologist" {% if doctors.Department == "oncologist" %} selected {% endif %}>oncologist</option>
+        <option value="anestesialogy" {% if doctors.Department == "anestesialogy" %} selected {% endif %}>anestesialogy</option>
+        <option value="pediatrics" {% if doctors.Department == "pediatrics" %} selected {% endif %}>pediatrics</option></select>
+        <br/>
+        <br/>
+        Phone no  : 
+        <input type="text" name="contact_no" value="{{doctors.contact_no}}"/>
+        <br/>
+        <br/>
+        <input type="submit" style="padding: 10px;margin: 10px;background-color:azure; color: brown;" value="SUBMIT"/>
+    </center>
+    </form>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reply</title>
+</head>
+<body>
+    <center>
+    <h3>REPLY</h3>
+    <form method="post">
+        {% csrf_token %} 
+        <input type="text" name="Complaint" value="{{replies.Complaint}}" readonly>
+        <textarea name="Reply"></textarea>
+        <br/>
+        <br/>
+        <input type="submit" value="send"/>
+    </form>
+    </center>
+</body>
+</html>

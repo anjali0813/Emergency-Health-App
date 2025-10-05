@@ -1,0 +1,97 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctors</title>
+</head>
+<body>
+     <center>
+        <h3>ADD & MANAGE DOCTORS</h3>
+    <table border="1">
+        <tr>
+            <th>Doctor name</th>
+            <th>Doctor place</th>
+            <th>Department</th>
+            <th>Phone no</th>
+            <th>Action</th>
+        </tr>
+        {% for i in doctors %}
+        <tr>
+            <td>{{i.DoctorName}}</td>
+            <td>{{i.Place}}</td>
+            <td>{{i.Department}}</td>
+            <td>{{i.Contact_no}}</td>
+            <td><a href="#">edit</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br/>
+    <input type="submit" value="ADD NEW" style="margin-left: 350px;"/>
+    </center>
+</body>
+</html> -->
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Doctors</title>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 8px 12px;
+        }
+        .action-btn {
+            margin: 0 5px;
+            text-decoration: none;
+            padding: 5px 10px;
+            border: 1px solid #333;
+            border-radius: 3px;
+            background-color: #f0f0f0;
+            color: #000;
+        }
+        .edit-btn {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .delete-btn {
+            background-color: #f44336;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <center>
+        <h3>ADD & MANAGE DOCTORS</h3>
+        <table border="1">
+            <tr>
+                <th>Doctor name</th>
+                <th>Doctor place</th>
+                <th>Department</th>
+                <th>Phone no</th>
+                <th>Action</th>
+            </tr>
+            {% for i in doctors %}
+            <tr>
+                <td>{{ i.DoctorName }}</td>
+                <td>{{ i.Place }}</td>
+                <td>{{ i.Department }}</td>
+                <td>{{ i.contact_no }}</td>
+                <td>
+                    <a href="/editdoctor/{{ i.id }}" class="action-btn edit-btn">Edit</a>
+                    <a href="/deletedoctor/{{ i.id }}" class="action-btn delete-btn" onClick="return confirm('Are you sure you want to delete this doctor?');">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        <br/>
+        <a href="/AddManageDoctors" style="margin-left: 350px;" class="action-btn">ADD NEW</a>
+    </center>
+</body>
+</html>

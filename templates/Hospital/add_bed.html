@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>bed booking</title>
+</head>
+<body>
+     <center>
+    <h3>ADD BED</h3>
+    <table border="1">
+        <tr>
+            <th>Si/no</th>
+            <th>Hospial name</th>
+            <th>Hospital place</th>
+            <th>count</th>
+            <th>ward</th>
+            <th>action</th>
+        </tr>
+        {% for i in beds %}
+        <tr>
+
+            <td>{{forloop.counter}}</td>
+            <td>{{i.HOSPITAL.HospitalName}}</td>
+            <td>{{i.HOSPITAL.Address}}</td>
+            <td>{{i.count}}</td>
+            <td>{{i.ward}}</td>
+            <td>
+            <a href="/editbed/{{ i.id }}" class="action-btn edit-btn">Edit</a>
+            <a href="/deletebed/{{ i.id }}" class="action-btn delete-btn" onClick="return confirm('Are you sure you want to delete this bed?');">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+     <a href="/managebed" style="margin-left: 350px;" class="action-btn">ADD</a>
+</center> 
+</body>
+</html>

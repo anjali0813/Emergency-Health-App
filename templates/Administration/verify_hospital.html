@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Hospital</title>
+</head>
+<body>
+    <center>
+        <h3>VERIFY HOSPITAL</h3>
+    <table border="1">
+        <tr>
+            <th>Hospital name</th>
+            <th>contact no</th>
+            <th>email</th>
+            <th>place</th>
+            <th>Action</th>
+         </tr>
+         {% for i in hospitals %}
+       <tr>
+            <td>{{i.HospitalName}}</td>
+            <td>{{i.Email}}</td>
+            <td>{{i.Contact_no}}</td>
+            <td>{{i.Address}}</td>
+            {% if i.LOGIN.UserType == "pending" %}
+            <td><a href="/Accept_H/{{i.id}}">Accept</a>
+                <br/>
+            <a href="/Reject_H/{{i.id}}">Reject</a></td>
+            {% elif i.LOGIN.UserType == "Hospital" %}
+            <td><a href="/Reject_H/{{i.id}}">Reject</a></td>
+            {% elif i.LOGIN.UserType == "Rejected" %}
+            <td><a href="/Accept_H/{{i.id}}">Accept</a></td>
+            {% else %}
+            <td>Invalid User</td>
+            {% endif %}
+        </tr>
+        {% endfor %}
+    </table>
+    </center>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pharmacy</title>
+</head>
+<body>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <center>
+        <h2 style="font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-style: oblique;">PHARMACY INFO</h2>
+
+        medicine name: 
+        <input type="text" name="MedicineName"/>
+        <br/>
+        <br/>
+        
+      ManufacturingDate:
+          <input type="date" name="ManufacturingDate"/>
+        <br/>
+        <br/>
+        ExpairyDate:
+        <input type="date" name="ExpiryDate"/>
+        <br/>
+        <br/>
+        MedicineDescription:
+        <input type="text" name="MedicineDescription"/>
+        <br/>
+        <br/>
+        medicine quantity:
+        <input type="text" name="MEDICINE"/>
+        <br/>
+        Image:
+        <input type="file" name="Photo"/>
+        <br/>
+        <br/>
+        <input type="submit" style="padding: 10px;margin: 10px;background-color:azure; color: brown;" value="SUBMIT"/>
+    </center>
+    </form>
+</body>
+</html>

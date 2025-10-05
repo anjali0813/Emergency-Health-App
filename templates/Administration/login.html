@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+<body>
+     <form method="post">
+        {%csrf_token%}
+        <center>
+        <h2 style="font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;font-style: oblique;">ADMIN LOGIN</h2>
+        Username : 
+        <input type="text" name="Username"/>
+        <br/>
+        <br/>
+        Password :
+        <input type="password" name="Password"/>
+        <br/>
+        <br/>
+        <input type="submit" style="padding: 10px;margin: 10px;background-color:azure; color: brown;" value="LOGIN"/>
+        <a href="/Register_hsptl"><input type="button" style="padding: 10px;margin: 10px;background-color:azure; color: brown;" value="HOSPITAL REGISTER"/></a>
+        <a href="/Register_phmy"><input type="button" style="padding: 10px;margin: 10px;background-color:azure; color: brown;" value="PHARMACY REGISTER"/></a>
+    </center>
+    </form>
+</body>
+</html>
