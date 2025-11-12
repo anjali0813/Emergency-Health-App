@@ -4,6 +4,7 @@ from django.views import View
 
 from HealthEmergencyApp.forms import *
 from HealthEmergencyApp.models import *
+from HealthEmergencyApp.serialisers import Hospitalserializer, Logserializer, Regserializer
 
 # Create your views here.
 # /////////////////////////////////////////// ADMIN /////////////////////////////////////////////
@@ -295,3 +296,66 @@ class RejectBooking(View):
         c.Status='Rejected'
         c.save()
         return HttpResponse('''<script>alert("Not verified");window.location=("/ManageBooking")</script>''')
+    
+##############################################################################################################################
+
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+class UserReg_api(APIView):
+    def post(self, request):
+        print("#########################3", request.data)
+
+        user_serial = Regserializer(data=request.data)
+        login_serial = Logserializer(data=request.data)
+
+        data_valid = user_serial.is_valid()
+        login_valid = login_serial.is_valid()
+
+        if data_valid and login_valid:
+            login_profile = login_serial.save(UserType='USER')
+
+            # Assign the login profile to the UserTable and save the UserTable
+            user_serial.save(LOGIN=login_profile)
+
+            # Return the serialized user data in the response
+            return Response(user_serial.data, status=status.HTTP_201_CREATED)
+        
+        return Response({
+            'login_error' : login_serial.errors if not login_valid else None,
+            'user_error' : user_serial.errors if not data_valid else None
+        }, status=status.HTTP_400_BAD_REQUEST)
+    
+class LoginPage_api(APIView):
+        def post(self,request):
+            response_dict = {}
+            
+            #get data from the request
+            username = request.data.get("Username")
+            password = request.data.get("Password")
+
+            #validate input 
+            if not username or not password:
+                response_dict["message"]="Failed"
+                return Response(response_dict,status=status.HTTP_400_BAD_REQUEST)
+            
+            #fetch the user from LoginTable
+            t_user = LoginModel.objects.filter(Username=username, Password=password).first()
+
+            if not t_user:
+                response_dict["message"]="Failed"
+                return Response(response_dict,status=status.HTTP_401_UNAUTHORIZED)
+            
+            else:
+                response_dict["message"]="success"
+                response_dict["login_id"]=t_user.id
+                response_dict["UserType"]=t_user.UserType
+
+                return Response(response_dict,status=status.HTTP_200_OK)
+
+class ViewHospitalAPI(APIView):
+    def get(self,request):
+        c=HospitalModel.objects.all()
+        serializer=Hospitalserializer(c, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

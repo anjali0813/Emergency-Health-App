@@ -11,7 +11,7 @@ class PharmacyForm(ModelForm):
 class UserForm(ModelForm):
     class Meta:
         model=UserModel
-        fields=['Name','Dob','Gender','MedicalHistory','Email','Address','Contact_no','Photo']
+        fields=['Name','Dob','Gender','Email','Address','Contact_no','Photo']
 
 class ComplaintForm(ModelForm):
     class Meta:

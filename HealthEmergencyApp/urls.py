@@ -58,10 +58,14 @@ urlpatterns = [
     path('ManageBooking',ManageBooking.as_view(),name="ManageBooking"),
     path('addequipment',addequipment.as_view(),name='addequipment'),
     path('Accept_B/<int:id>',AcceptBooking.as_view(),name="AcceptPharmacy"),
-    path('Reject_B/<int:id>',RejectBooking.as_view(),name="RejectPharmacy")
-    
-    
+    path('Reject_B/<int:id>',RejectBooking.as_view(),name="RejectPharmacy"),
 
-]
+    #######################################################################################
+
+    path('User_Registration',UserReg_api.as_view(),name='User_Registration'),
+    path('User_Login',LoginPage_api.as_view(),name='User_Login'),
+    path('Hospital_view',ViewHospitalAPI.as_view(),name="Hospital_view"),
+
+]    
 
 

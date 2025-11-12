@@ -18,9 +18,8 @@ class PharmacyModel(models.Model):
 class UserModel(models.Model):
     LOGIN=models.ForeignKey(LoginModel,on_delete=models.CASCADE,null=True,blank=True)
     Name=models.CharField(max_length=30,null=True,blank=True)
-    Dob=models.DateField(null=True,blank=True)
+    Dob=models.CharField(max_length=100,null=True,blank=True)
     Gender=models.CharField(max_length=40,null=True,blank=True)
-    MedicalHistory=models.CharField(max_length=40,null=True,blank=True)
     Email=models.CharField(max_length=40,null=True,blank=True)
     Address=models.CharField(max_length=40,null=True,blank=True)
     Contact_no=models.BigIntegerField(null=True,blank=True)
@@ -40,6 +39,8 @@ class HospitalModel(models.Model):
     Email=models.CharField(max_length=30,null=True,blank=True)
     Contact_no=models.BigIntegerField(null=True,blank=True)
     Address=models.CharField(max_length=30,null=True,blank=True)
+    latitude=models.CharField(max_length=30,null=True,blank=True)
+    longitude=models.CharField(max_length=30,null=True,blank=True)
     LOGIN=models.ForeignKey(LoginModel,on_delete=models.CASCADE,null=True,blank=True)
 
 
