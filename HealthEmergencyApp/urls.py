@@ -65,6 +65,8 @@ urlpatterns = [
     path('User_Registration',UserReg_api.as_view(),name='User_Registration'),
     path('User_Login',LoginPage_api.as_view(),name='User_Login'),
     path('Hospital_view',ViewHospitalAPI.as_view(),name="Hospital_view"),
+    path('Doctor_view/<int:id>',ViewDoctorAPI.as_view(),name="Doctor_view"),
+    path('Doctor_book/<int:id>',BookDoctorApi.as_view(),name='BookDoctorApi'),
 
 ]    
 

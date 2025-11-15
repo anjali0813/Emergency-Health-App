@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 
 # Create your models here.
@@ -86,6 +87,19 @@ class DoctorModel(models.Model):
     contact_no=models.IntegerField(null=True,blank=True)
     Photo = models.FileField(null=True, blank=True)
 
+
+class BookDoctor(models.Model):
+    USERID = models.ForeignKey(UserModel,on_delete=models.CASCADE,null=True,blank=True)
+    DOCID = models.ForeignKey(DoctorModel,on_delete=models.CASCADE,null=True,blank=True)
+    Date = models.DateField(null=True,blank=True)
+    Time = models.TimeField(null=True,blank=True)
+    Token = models.CharField(max_length=100,null=True,blank=True)
+    Status = models.CharField(max_length=100,null=True,blank=True)
+
+    def save(self, *args, **kwargs):
+        if not self.Token:
+            self.Token = str(uuid.uuid4()).split('-')[0].upper()
+        super(BookDoctor, self).save(*args, **kwargs)
 
 class PrescriptionModel(models.Model):
     USER=models.ForeignKey(UserModel,on_delete=models.CASCADE,null=True,blank=True)

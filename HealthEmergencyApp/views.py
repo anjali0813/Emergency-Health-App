@@ -1,10 +1,12 @@
+from datetime import datetime, timedelta, time as dtime
+import uuid
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.views import View
 
 from HealthEmergencyApp.forms import *
 from HealthEmergencyApp.models import *
-from HealthEmergencyApp.serialisers import Hospitalserializer, Logserializer, Regserializer
+from HealthEmergencyApp.serializers import *
 
 # Create your views here.
 # /////////////////////////////////////////// ADMIN /////////////////////////////////////////////
@@ -359,3 +361,114 @@ class ViewHospitalAPI(APIView):
         c=HospitalModel.objects.all()
         serializer=Hospitalserializer(c, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+class ViewDoctorAPI(APIView):
+    def get(self,request,id):
+        d=DoctorModel.objects.filter(HOSPITAL__id=id)
+        serializer=Doctorserializer(d,many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+class BookDoctorApi(APIView):
+    def post(self, request, id):
+        print('========================', request.data)
+
+        # Get user
+        try:
+            user = UserModel.objects.get(LOGIN_id=id)
+        except UserModel.DoesNotExist:
+            return Response({"error": "User not found"}, status=404)
+
+        # Get doctor
+        doctor_id = request.data.get("DOCID")
+        try:
+            doctor = DoctorModel.objects.get(id=doctor_id)
+        except DoctorModel.DoesNotExist:
+            return Response({"error": "Doctor not found"}, status=404)
+
+        # Working hours
+        start_hour = 9
+        end_hour = 17
+        slot_duration_minutes = 30
+
+        # Existing bookings
+        bookings = BookDoctor.objects.filter(DOCID=doctor).order_by('Date', 'Time')
+
+        today = datetime.now().date()
+        next_slot = None
+
+        # Find next available slot
+        for day_offset in range(0, 30):
+            check_date = today + timedelta(days=day_offset)
+            current_time = dtime(start_hour, 0)
+
+            while current_time < dtime(end_hour, 0):
+                if not bookings.filter(Date=check_date, Time=current_time).exists():
+                    next_slot = (check_date, current_time)
+                    print("=========== Found slot:", next_slot)
+                    break
+
+                # Move time slot ahead
+                full_datetime = datetime.combine(check_date, current_time) + timedelta(minutes=slot_duration_minutes)
+                current_time = full_datetime.time()
+
+            if next_slot:
+                break
+
+        # If no slot available
+        if not next_slot:
+            return Response({"error": "No available slots in the next 30 days"}, status=400)
+
+        # Create booking
+        token = str(uuid.uuid4()).split('-')[0].upper()
+
+        booking = BookDoctor.objects.create(
+            USERID=user,
+            DOCID=doctor,
+            Date=next_slot[0],
+            Time=next_slot[1],
+            Token=token,
+            Status="pending"
+        )
+
+        serializer = DoctorBookserializer(booking)
+        return Response(serializer.data, status=201)
+
+
+
+class BookingHis(APIView):
+    def get(self,request,id):
+        c = BookDoctor.objects.filter(USERID_LOGIN_id = id)
+        serializers = BookingHistorydoctor(c, many=True)
+        return Response(serializers.data,status=status.HTTP_201_CREATED)
+    
+
+class AddReview(APIView):
+    def post(self,request,id):
+        c = UserModel.objects.get(LOGIN_id = id)
+        d = Reviewserializer(data = request.data)
+        if d.is_valid():
+            d.save(USER = c)
+            return Response(d.data,status=status.HTTP_200_OK)
+        return Response(d.error,status=status.HTTP_400_BAD_REQUEST)
+
+
+class AddComplaintAPI(APIView):
+    def get(self,request,id):
+        c = ComplaintModel.objects.filter(USER_LOGIN_id = id)
+        serializer = ComplaintSerializer(c,many=True)
+        return Response(serializer.data,status=status.HTTP_200_OK)
+    
+    def post(self,request,id):
+        try:
+            c=UserModel.objects.get(LOGIN_id=id)
+        except UserModel.DoesNotExist:
+            return Response({"error": "User not found"},status=status.HTTP_404_NOT_FOUND)
+        
+        d=ComplaintSerializer(data=request.data)
+        if d.is_valid():
+            d.save(USER=c)
+            print('===============================================',d.data)
+            return Response(d.data,status=status.HTTP_200_OK)
+        else:
+            print('Validation error:' ,d.error)
+            return Response(d.errors, status=status.HTTP_400_BAD_REQUEST)
