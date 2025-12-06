@@ -171,6 +171,8 @@ class ViewDoctor(View):
     def get(self, request):
         c = DoctorModel.objects.all()
         return render(request, "hospital/doctors.html",{'doctors':c})
+    
+
 class editdoctor(View):
     def get(self,request,id):
         c=DoctorModel.objects.get(id=id)
@@ -437,7 +439,7 @@ class BookDoctorApi(APIView):
 
 class BookingHis(APIView):
     def get(self,request,id):
-        c = BookDoctor.objects.filter(USERID_LOGIN_id = id)
+        c = BookDoctor.objects.filter(USERID__LOGIN_id = id)
         serializers = BookingHistorydoctor(c, many=True)
         return Response(serializers.data,status=status.HTTP_201_CREATED)
     
@@ -472,3 +474,119 @@ class AddComplaintAPI(APIView):
         else:
             print('Validation error:' ,d.error)
             return Response(d.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+
+class AmbulancebookingAPI(APIView):
+    def post(self,request,lid,ambulance_id):
+
+        # step 1: get user by login ID
+        user = UserModel.objects.get(LOGIN__id=lid)
+        print('-------------------->', user)
+        if not user:
+            return Response({'error':'User not found for this login ID'}, status=status.HTTP_404_NOT_FOUND)
+        
+        #step 2: get ambulance by ID
+        try:
+            ambulance=AmbulanceModel.objects.get(id=ambulance_id)
+            print('====================================>', ambulance)
+        except AmbulanceModel.DoesNotExist:
+            return Response({'error':'Ambulance not found'},status=status.HTTP_404_NOT_FOUND)
+        
+        #step 3: validate date
+        date = request.data.get('Date')
+        if not date:
+            return Response({'error': 'Date is required'},status=status.HTTP_400_BAD_REQUEST)
+        
+        #step4 : create booking and assign user
+        booking = AmbulanceBookingModel.objects.create(
+            AMBULANCE = ambulance,
+            Date = date,
+            status = 'pending',
+            USERID = user    #<--assigned here
+        )
+
+        #step 5: serialize and return response
+        serializer=AmbulanceBookingSerializer(booking)
+        return Response(serializer.data,status=status.HTTP_201_CREATED)
+    
+class AmbulanceBookingHistoryAPI(APIView):
+    def get(self,request,lid):
+        try:
+            user=UserModel.objects.get(LOGIN_id=lid)
+        except UserModel.DoesNotExist:
+            return Response({"error":"User not found"},status=404)
+            
+        bookings=AmbulanceBookingModel.objects.filter(USERID=user).order_by('-Date')
+        serializer= AmbulanceBookingHistorySerializer(bookings,many=True)
+        return Response(serializer.data,status=200)
+        
+class AmbulanceByHospitalAPI(APIView):
+    def get(self,request,hospital_id):
+        ambulances=AmbulanceModel.objects.filter(HOSPITAL_id=hospital_id)
+        serializer=AmbulanceSerializer(ambulances,many=True)
+        return Response(serializer.data,status=status.HTTP_200_OK)
+    
+            
+
+class BedBookingAPI(APIView):
+    def post(self,request,id):
+        print('===================================',request.data)
+        try:
+            #Get User
+            user=UserModel.objects.get(LOGIN_id=id)
+            print('--------------------------------', user)
+        except UserModel.DoesNotExist:
+            return Response({"error":"User not found"},status=status.HTTP_404_NOT_FOUND)
+
+        serializer=BedBookingSerializer(data=request.data)
+        if serializer.is_valid():
+            bed_id=request.data.get("BED")
+
+            #check if bed exists
+            try:
+                bed=BedModel.objects.get(id=bed_id)
+            except BedModel.DoesNotExist:
+                return Response({"error":"Bed not found"},status=status.HTTP_404_NOT_FOUND)
+            
+            #check if bed count is available
+            if bed.count is None or bed.count<=0:
+                return Response({"error":"No beds available in this ward"},status=status.HTTP_400_BAD_REQUEST)
+            
+            #save booikng with default status = "pending"
+            booking=serializer.save(USER=user, Status="pending")
+
+            #reduce bed count
+            bed.count-=1
+            bed.save()
+
+            #Return response
+            return Response({
+                "message":"Bed booked successfully",
+                "booking":BedBookingSerializer(booking).data,
+                "remaining_beds":bed.count
+            },status=status.HTTP_200_OK)
+        
+        #handle serializer validation errors
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+    
+
+class BedBookingHistoryAPI(APIView):
+    def get(self,request,id):
+        try:
+            user=UserModel.objects.get(LOGIN_id=id)
+        except UserModel.DoesNotExist:
+            return Response({"error":"user not found"},status=status.HTTP_404_NOT_FOUND) 
+
+        bookings= BedBookingModel.objects.filter(USER=user).order_by('-date')
+        serializer=BedBookingHistorySerializer(bookings,many=True)
+        return Response(serializers.data,status=status.HTTP_200_OK)
+        
+
+class ViewBedAPI(APIView):
+    def get(self,request,id):
+        print('=====================================',request.data)
+        c=BedModel.objects.filter(HOSPITAL_id=id)
+        serializer=BedSerializer(c,many=True)
+        print('-----------------------------------------------',serializer.data)
+        return Response(serializer.data,status=status.HTTP_200_OK)
+        

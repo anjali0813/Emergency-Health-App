@@ -55,6 +55,7 @@ class AmbulanceModel(models.Model):
 
 
 class AmbulanceBookingModel(models.Model):
+    USERID = models.ForeignKey(UserModel, on_delete=models.CASCADE, null=True, blank=True)
     AMBULANCE = models.ForeignKey(AmbulanceModel, on_delete=models.CASCADE, null=True, blank=True)
     Date = models.DateField(null=True, blank=True)
     status = models.CharField(max_length=10, null=True, blank=True)
