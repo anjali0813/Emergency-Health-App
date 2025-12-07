@@ -66,7 +66,7 @@ urlpatterns = [
     path('Accept_B/<int:id>',AcceptBooking.as_view(),name="AcceptPharmacy"),
     path('Reject_B/<int:id>',RejectBooking.as_view(),name="RejectPharmacy"),
 
-    #######################################################################################
+    #####################################API##################################################
 
     path('User_Registration',UserReg_api.as_view(),name='User_Registration'),
     path('User_Login',LoginPage_api.as_view(),name='User_Login'),
@@ -80,6 +80,14 @@ urlpatterns = [
     path('view_bed/<int:id>',ViewBedAPI.as_view(),name="View_Bed"),
     path('bedbooking_history/<int:id>',BedBookingHistoryAPI.as_view(),name="BedBooking_history"),
     path("doctor_booking_history/<int:id>", BookingHis.as_view(), name="doctor_booking_history"),
+    path('complaints/<int:id>', AddComplaintAPI.as_view(), name='complaints'),
+    path('add_review/<int:id>',AddReview.as_view(), name='review'),
+    path('volunteer_registration',VolunteerRegAPI.as_view(),name='Volunteer_Registration'),
+    path('volunteer_profile/<int:lid>',VolunteerProfileAPI.as_view(),name='Volunteer_Profile'),
+    path('ViewTask/<int:lid>',ViewTaskAssignmentAPI.as_view(),name='View_Task'),
+    path('volunteer_feedback/<int:lid>',VolunteerFeedbackAPI.as_view(),name='Volunteer_Feedback'),
+    path('alert/<int:lid>',PublicAlertAPI.as_view(),name='Public_alert'),
+    path('view_alert/<int:lid>',PublicAlertAPI.as_view(),name='View_Alert'),
 
     
     

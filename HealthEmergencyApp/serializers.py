@@ -82,11 +82,35 @@ class BedSerializer(ModelSerializer):
         fields=['count','ward','bed_id']
 
 class BedBookingHistorySerializer(serializers.ModelSerializer):
-    hospital_name=serializers.CharField(source='BED.HOSPITAL.Hospitalname',read_only=True)
+    hospital_name=serializers.CharField(source='BED.HOSPITAL.HospitalName',read_only=True)
     ward=serializers.CharField(source='BED.ward',read_only=True)
     bed_id=serializers.IntegerField(source='BED.id',read_only=True)
     user_name=serializers.CharField(source='USER.Name',read_only=True)
     
     class Meta:
         model=BedBookingModel
-        fields=['id','bed_id','ward','hosptal_name','status','date','user_name']
+        fields=['id','bed_id','ward','hospital_name','Status','date','user_name']
+
+
+class VolunteerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VolunteerModel
+        fields = "__all__"
+
+
+class TaskAssignmentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TaskAssignmentModel
+        fields = "__all__"
+
+    
+class VolunteerFeedbackSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FeedbackVolunteer
+        fields = "__all__"
+
+
+class PublicAlertSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AlertModel
+        fields = "__all__"

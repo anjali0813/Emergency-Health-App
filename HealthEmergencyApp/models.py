@@ -136,3 +136,38 @@ class PharmacyBookingModel(models.Model):
     PRESCRIPTION=models.ForeignKey(PrescriptionModel,on_delete=models.CASCADE,null=True,blank=True)
     Date=models.DateField(null=True,blank=True)
     Status=models.CharField(max_length=30,null=True,blank=True)
+
+
+class VolunteerModel(models.Model):
+    LOGINID = models.ForeignKey(LoginModel, on_delete=models.CASCADE, null=True, blank=True)
+    Name = models.CharField(max_length=100 , null=True , blank=True)
+    Email = models.EmailField(null=True, blank=True)
+    Age = models.IntegerField(null=True, blank=True)
+    Phone = models.BigIntegerField(null=True, blank=True)
+    Address = models.TextField(null=True, blank=True)
+    Skills = models.TextField(null=True, blank=True)
+    Gender = models.TextField(null=True, blank=True)
+    Image = models.FileField(upload_to='volunteer/',null=True, blank=True)
+
+
+class TaskAssignmentModel(models.Model):
+    VOLUNTEERID = models.ForeignKey(VolunteerModel,on_delete=models.CASCADE,null=True,blank=True)
+    TaskName = models.CharField(max_length=100, null=True, blank=True)
+    TaskDescription = models.TextField(null=True, blank=True)
+    TaskAddress = models.TextField(null=True, blank=True)
+    TaskDate = models.DateField(null=True, blank=True)
+    Status = models.CharField(max_length=100, null=True, blank=True, default="Assigned")
+
+
+class FeedbackVolunteer(models.Model):
+    VolunteerID = models.ForeignKey(VolunteerModel,on_delete=models.CASCADE, null=True, blank=True)
+    Feedback = models.TextField(null=True, blank=True)
+    Rating = models.IntegerField(null=True, blank=True)
+    Created = models.DateField(auto_now_add=True)
+
+
+class AlertModel(models.Model):
+    Alert = models.CharField(max_length=100, null=True, blank=True)
+    Latitude = models.FloatField(null=True, blank=True)
+    Longitude = models.FloatField(null=True, blank=True)
+    Date = models.DateTimeField(null=True, blank=True)

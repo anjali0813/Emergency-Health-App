@@ -456,7 +456,7 @@ class AddReview(APIView):
 
 class AddComplaintAPI(APIView):
     def get(self,request,id):
-        c = ComplaintModel.objects.filter(USER_LOGIN_id = id)
+        c = ComplaintModel.objects.filter(USER__LOGIN_id = id)
         serializer = ComplaintSerializer(c,many=True)
         return Response(serializer.data,status=status.HTTP_200_OK)
     
@@ -579,7 +579,9 @@ class BedBookingHistoryAPI(APIView):
 
         bookings= BedBookingModel.objects.filter(USER=user).order_by('-date')
         serializer=BedBookingHistorySerializer(bookings,many=True)
-        return Response(serializers.data,status=status.HTTP_200_OK)
+        return Response(serializer.data,status=status.HTTP_200_OK)
+    
+
         
 
 class ViewBedAPI(APIView):
@@ -590,3 +592,84 @@ class ViewBedAPI(APIView):
         print('-----------------------------------------------',serializer.data)
         return Response(serializer.data,status=status.HTTP_200_OK)
         
+
+class VolunteerRegAPI(APIView):
+    def post(self,request):
+        print("#####################################",request.data)
+
+        user_serial = VolunteerSerializer(data=request.data)
+        login_serial = Logserializer(data=request.data)
+
+        data_valid = user_serial.is_valid()
+        login_valid = login_serial.is_valid()
+
+        if data_valid and login_valid:
+            login_profile = login_serial.save(UserType = "Volunteer")
+
+            # Assign the login profile to the usertable and save the usertable 
+            user_serial.save(LOGINID = login_profile)
+
+            # return te  serialized user data in the response
+            return Response(user_serial.data,status=status.HTTP_201_CREATED)
+        
+        return Response({
+            'login_error':login_serial.errors if not login_valid else None,
+            'user_error': user_serial.errors if not data_valid else None
+        }, status==status.HTTP_400_BAD_REQUEST)
+    
+class VolunteerProfileAPI(APIView):
+    def get(self,request,lid):
+        print(lid)
+        c=VolunteerModel.objects.get(LOGINID_id = lid)
+        d=VolunteerSerializer(c)
+        return Response(d.data,status=status.HTTP_200_OK)
+    def put(self,request,lid):
+        user = VolunteerModel.objects.get(LOGINID_id=lid)
+        serializer = VolunteerSerializer(user,data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.error,status=status.HTTP_200_OK)
+        return Response(serializer.error,status=status.HTTP_400_BAD_REQUEST)
+    
+
+class ViewTaskAssignmentAPI(APIView):
+    def get(self,request,lid):
+        c = TaskAssignmentModel.objects.filter(VolunteerID_LOGINID_id=lid)
+        serializer = TaskAssignSerializer(s,many=True)
+        return Response(serializer.data,status=status.HTTP_200_OK)
+    
+    def put(self,request,lid):
+        print("=========================================================",request.data)
+        try:
+            # Fetch the specific task assigned to this volunteer
+            task = TaskAssignmentModel.objects.get(id=lid)
+        except TaskAssignmentModel.objects.get(id=lid):
+            return Response({"Error" : "Task not found"},status=status.HTTP_404_NOT_FOUND)
+     
+        serializer = TaskAssignSerializer(task , data=request.data , partial=true)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data,status=status.HTTP_200_OK)
+        return Response(serializer.errors,status=status.HTTP_400_BAD_REQUEST)
+
+
+class VolunteerFeedbackAPI(APIView):
+    def post(self,request,lid):
+        print(request.data)
+        try:
+            c = VolunteerModel.objects.get(LOGINID_id=lid)
+        except VolunteerModel.DoesNotExist:
+            return Response({"Error" : "Volunteer not found"},status=status.HTTP_404_NOT_FOUND)
+        
+        d =VolunteerFeedbackSerializer(data=request.data)
+        if d.is_valid():
+            d.save(VOLUNTEERID=c)
+            return Response(d.data,status=status.HTTP_200_OK)
+        return Response(d.errors,status=status.HTTP_400_BAD_REQUEST)
+    
+
+class PublicAlertAPI(APIView):
+    def post(self,request):
+        c = AlertModel.objects.all()
+        serializer = PublicAlertSerializer(c,many=True)
+        return Response(serializer.data,status=status.HTTP_200_OK)
