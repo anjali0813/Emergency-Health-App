@@ -171,3 +171,10 @@ class AlertModel(models.Model):
     Latitude = models.FloatField(null=True, blank=True)
     Longitude = models.FloatField(null=True, blank=True)
     Date = models.DateTimeField(null=True, blank=True)
+
+
+class BloodDonationRequestModel(models.Model):
+    USERID = models.ForeignKey(UserModel, on_delete=models.CASCADE, null=True, blank=True)
+    VolunteerID = models.ForeignKey(VolunteerModel,on_delete=models.CASCADE, null=True, blank=True)
+    Bloodgroup=models.CharField(max_length=100,null=True,blank=True)
+    status=models.CharField(max_length=100,null=True,blank=True)

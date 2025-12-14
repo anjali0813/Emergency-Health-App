@@ -103,6 +103,11 @@ class TaskAssignmentSerializer(serializers.ModelSerializer):
         model = TaskAssignmentModel
         fields = "__all__"
 
+class BloodDonationRequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=BloodDonationRequestModel
+        fields="_all_"        
+
     
 class VolunteerFeedbackSerializer(serializers.ModelSerializer):
     class Meta:
