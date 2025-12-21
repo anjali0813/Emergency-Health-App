@@ -350,7 +350,19 @@ class LoginPage_api(APIView):
             if not t_user:
                 response_dict["message"]="Failed"
                 return Response(response_dict,status=status.HTTP_401_UNAUTHORIZED)
-            
+            if t_user.UserType == "Volunteer":
+                volunteer = VolunteerModel.objects.get(LOGINID__id = t_user.id)
+
+                volunteer.latitude = request.POST.get('latitude')
+                volunteer.longitude = request.POST.get('longitude')
+                volunteer.save()
+
+                response_dict["message"] = "success"
+                response_dict["login_id"] = t_user.id
+                response_dict["UserType"] = t_user.UserType
+
+                return Response(response_dict, status=status.HTTP_200_OK)
+
             else:
                 response_dict["message"]="success"
                 response_dict["login_id"]=t_user.id
@@ -687,3 +699,10 @@ class BloodDonationRequestAPI(APIView):
         if d.is_valid():
             d.save(USERID=c)
             return Response(d.data,status=status.HTTP_200_OK)
+        
+
+class ViewAlertAPI(APIView):
+    def get(self,request):
+        c = AlertModel.objects.all()
+        ser = PublicAlertSerializer(c, many=True)
+        return Response(ser.data,status=status.HTTP_200_OK)

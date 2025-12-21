@@ -89,8 +89,7 @@ urlpatterns = [
     path('alert/<int:lid>',PublicAlertAPI.as_view(),name='Public_alert'),
     path('view_alert/<int:lid>',PublicAlertAPI.as_view(),name='View_Alert'),
     path('BloodDonation/<int:lid>',BloodDonationRequestAPI.as_view(),name='BloodDonation'),
-
-    
+    path('view_alerts',ViewAlertAPI.as_view(),name='View_Alert'),    
     
     
 

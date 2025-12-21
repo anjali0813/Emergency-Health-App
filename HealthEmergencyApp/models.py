@@ -147,6 +147,8 @@ class VolunteerModel(models.Model):
     Address = models.TextField(null=True, blank=True)
     Skills = models.TextField(null=True, blank=True)
     Gender = models.TextField(null=True, blank=True)
+    latitude = models.FloatField(null=True, blank=True)
+    longitude = models.FloatField(null=True, blank=True)
     Image = models.FileField(upload_to='volunteer/',null=True, blank=True)
 
 
