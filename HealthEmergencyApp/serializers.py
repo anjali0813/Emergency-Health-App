@@ -106,8 +106,21 @@ class TaskAssignmentSerializer(serializers.ModelSerializer):
 class BloodDonationRequestSerializer(serializers.ModelSerializer):
     class Meta:
         model=BloodDonationRequestModel
-        fields="_all_"        
+        fields=['Bloodgroup']
 
+class RequestSerializer(serializers.ModelSerializer):
+    user_latitude = serializers.CharField(source='USERID.latitude')
+    user_longitude = serializers.CharField(source='USERID.longitude')
+    user_name = serializers.CharField(source='USERID.Name')
+    user_no = serializers.CharField(source='USERID.Contact_no')
+    class Meta:
+        model=BloodDonationRequestModel
+        fields=['id','Bloodgroup', 'user_latitude', 'user_longitude', 'status', 'user_name', 'user_no']
+
+class AcceptBloodRequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BloodDonationRequestModel
+        fields = ['VolunteerID', 'status']
     
 class VolunteerFeedbackSerializer(serializers.ModelSerializer):
     class Meta:

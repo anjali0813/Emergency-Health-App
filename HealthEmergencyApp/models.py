@@ -25,6 +25,8 @@ class UserModel(models.Model):
     Address=models.CharField(max_length=40,null=True,blank=True)
     Contact_no=models.BigIntegerField(null=True,blank=True)
     Photo = models.FileField(upload_to='userprofile/',null=True, blank=True)
+    latitude=models.FloatField(null=True, blank=True)
+    longitude=models.FloatField(null=True, blank=True)
 
 
 class ComplaintModel(models.Model):
@@ -172,7 +174,7 @@ class AlertModel(models.Model):
     Alert = models.CharField(max_length=100, null=True, blank=True)
     Latitude = models.FloatField(null=True, blank=True)
     Longitude = models.FloatField(null=True, blank=True)
-    Date = models.DateTimeField(null=True, blank=True)
+    Date = models.DateTimeField(null=True, blank=True, auto_now_add=True)
 
 
 class BloodDonationRequestModel(models.Model):

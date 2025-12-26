@@ -86,10 +86,13 @@ urlpatterns = [
     path('volunteer_profile/<int:lid>',VolunteerProfileAPI.as_view(),name='Volunteer_Profile'),
     path('ViewTask/<int:lid>',ViewTaskAssignmentAPI.as_view(),name='View_Task'),
     path('volunteer_feedback/<int:lid>',VolunteerFeedbackAPI.as_view(),name='Volunteer_Feedback'),
-    path('alert/<int:lid>',PublicAlertAPI.as_view(),name='Public_alert'),
     path('view_alert/<int:lid>',PublicAlertAPI.as_view(),name='View_Alert'),
-    path('BloodDonation/<int:lid>',BloodDonationRequestAPI.as_view(),name='BloodDonation'),
+    path('BloodDonation/<int:id>',BloodDonationRequestAPI.as_view(),name='BloodDonation'),
     path('view_alerts',ViewAlertAPI.as_view(),name='View_Alert'),    
+    path('requests',ViewBloodReq.as_view()),    
+    path('acceptrequest/<int:id>',AcceptReq.as_view()),    
+    path('history/<int:id>',ReqHistory.as_view()),    
+    path('alert', AddAlertApi.as_view())
     
     
 

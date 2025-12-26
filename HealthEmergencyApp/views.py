@@ -331,44 +331,65 @@ class UserReg_api(APIView):
             'user_error' : user_serial.errors if not data_valid else None
         }, status=status.HTTP_400_BAD_REQUEST)
     
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+
 class LoginPage_api(APIView):
-        def post(self,request):
-            response_dict = {}
-            
-            #get data from the request
-            username = request.data.get("Username")
-            password = request.data.get("Password")
+    def post(self, request):
+        print(request.data)
 
-            #validate input 
-            if not username or not password:
-                response_dict["message"]="Failed"
-                return Response(response_dict,status=status.HTTP_400_BAD_REQUEST)
-            
-            #fetch the user from LoginTable
-            t_user = LoginModel.objects.filter(Username=username, Password=password).first()
+        username = request.data.get("Username")
+        password = request.data.get("Password")
+        latitude = request.data.get("latitude")
+        longitude = request.data.get("longitude")
 
-            if not t_user:
-                response_dict["message"]="Failed"
-                return Response(response_dict,status=status.HTTP_401_UNAUTHORIZED)
-            if t_user.UserType == "Volunteer":
-                volunteer = VolunteerModel.objects.get(LOGINID__id = t_user.id)
+        if not username or not password:
+            return Response(
+                {"message": "Failed"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
 
-                volunteer.latitude = request.POST.get('latitude')
-                volunteer.longitude = request.POST.get('longitude')
-                volunteer.save()
+        t_user = LoginModel.objects.filter(
+            Username=username,
+            Password=password
+        ).first()
 
-                response_dict["message"] = "success"
-                response_dict["login_id"] = t_user.id
-                response_dict["UserType"] = t_user.UserType
+        if not t_user:
+            return Response(
+                {"message": "Failed"},
+                status=status.HTTP_401_UNAUTHORIZED
+            )
 
-                return Response(response_dict, status=status.HTTP_200_OK)
+        # 🔵 VOLUNTEER
+        if t_user.UserType == "Volunteer":
+            volunteer = VolunteerModel.objects.get(LOGINID_id=t_user.id)
+            volunteer.latitude = latitude
+            volunteer.longitude = longitude
+            volunteer.save()
 
-            else:
-                response_dict["message"]="success"
-                response_dict["login_id"]=t_user.id
-                response_dict["UserType"]=t_user.UserType
+        # 🟢 USER
+        elif t_user.UserType == "USER":
+            user = UserModel.objects.get(LOGIN_id=t_user.id)
+            user.latitude = latitude
+            user.longitude = longitude
+            user.save()
 
-                return Response(response_dict,status=status.HTTP_200_OK)
+        # ✅ RETURN RESPONSE FOR ALL CASES
+        return Response(
+            {
+                "message": "success",
+                "login_id": t_user.id,
+                "UserType": t_user.UserType
+            },
+            status=status.HTTP_200_OK
+        )
+
+
 
 class ViewHospitalAPI(APIView):
     def get(self,request):
@@ -687,7 +708,7 @@ class VolunteerFeedbackAPI(APIView):
     
 
 class PublicAlertAPI(APIView):
-    def post(self,request):
+    def get(self,request):
         c = AlertModel.objects.all()
         serializer = PublicAlertSerializer(c,many=True)
         return Response(serializer.data,status=status.HTTP_200_OK)
@@ -697,7 +718,7 @@ class BloodDonationRequestAPI(APIView):
         c = UserModel.objects.get(LOGIN__id=id)
         d = BloodDonationRequestSerializer(data=request.data)
         if d.is_valid():
-            d.save(USERID=c)
+            d.save(USERID=c, status="pending")
             return Response(d.data,status=status.HTTP_200_OK)
         
 
@@ -706,3 +727,71 @@ class ViewAlertAPI(APIView):
         c = AlertModel.objects.all()
         ser = PublicAlertSerializer(c, many=True)
         return Response(ser.data,status=status.HTTP_200_OK)
+    
+
+class ViewBloodReq(APIView):
+    def get(self, request):
+        c = BloodDonationRequestModel.objects.filter(status="pending")
+        d = RequestSerializer(c, many=True)
+        return Response(d.data, status=status.HTTP_200_OK)
+    
+
+class ReqHistory(APIView):
+    def get(self, request, id):
+        c= BloodDonationRequestModel.objects.filter(VolunteerID__LOGINID__id = id)
+        ser = RequestSerializer(c, many=True)
+        return Response(ser.data, status=status.HTTP_200_OK)
+
+class AcceptReq(APIView):
+    def post(self, request, id):
+        try:
+            blood_request = BloodDonationRequestModel.objects.get(id=id)
+
+            volunteer_id = request.data.get('VolunteerID')
+
+            if not volunteer_id:
+                return Response(
+                    {"message": "VolunteerID required"},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            volunteer = VolunteerModel.objects.get(LOGINID__id=volunteer_id)
+
+            blood_request.VolunteerID = volunteer
+            blood_request.status = "Accepted"
+            blood_request.save()
+
+            return Response(
+                {
+                    "message": "Request accepted successfully",
+                    "request_id": blood_request.id,
+                    "VolunteerID": volunteer.id,
+                    "status": blood_request.status
+                },
+                status=status.HTTP_200_OK
+            )
+
+        except BloodDonationRequestModel.DoesNotExist:
+            return Response(
+                {"message": "Blood request not found"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        except VolunteerModel.DoesNotExist:
+            return Response(
+                {"message": "Volunteer not found"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+
+class AddAlertApi(APIView):
+    def post(self, request):
+        c = PublicAlertSerializer(data=request.data)
+        if c.is_valid():
+            c.save()
+            return Response(c.data, status=status.HTTP_200_OK)
+    def get(self, request):
+        c = AlertModel.objects.all().order_by('-Date').first()
+        d = PublicAlertSerializer(c)
+        return Response(d.data, status=status.HTTP_200_OK)
+        
