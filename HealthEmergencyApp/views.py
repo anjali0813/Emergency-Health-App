@@ -794,4 +794,154 @@ class AddAlertApi(APIView):
         c = AlertModel.objects.all().order_by('-Date').first()
         d = PublicAlertSerializer(c)
         return Response(d.data, status=status.HTTP_200_OK)
-        
+
+
+from openai import OpenAI
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from .models import ChatBotModel, UserModel
+import re
+# =====================================
+# OPENROUTER CLIENT (FREE MODEL)
+# =====================================
+
+client = OpenAI(
+    base_url="https://openrouter.ai/api/v1",
+    api_key="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"
+)
+
+# =====================================
+# FIRST AID CHATBOT API
+# =====================================
+
+class ChatBotAPI(APIView):
+
+    # ---------------- POST : SEND SYMPTOMS ----------------
+    def post(self, request, user_id):
+        try:
+            symptoms = request.data.get("message", "").strip()
+
+            if not symptoms:
+                return Response(
+                    {"error": "Symptoms are required"},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            # LOGIN ID from URL
+            user = UserModel.objects.get(LOGIN__id=user_id)
+
+            # FETCH LAST 6 CHATS
+            history = ChatBotModel.objects.filter(
+                user=user
+            ).order_by("timestamp")[:6]
+
+            # SYSTEM PROMPT: short advice + department
+            messages = [
+                    {
+                        "role": "system",
+                        "content": (
+                            "You are a medical first-aid assistant. "
+                            "Give ONLY short first-aid instructions in 2-3 sentences. "
+                            "Do NOT diagnose diseases. "
+                            "Do NOT prescribe medicines. "
+                            "ALWAYS include the most relevant medical department for consultation in the exact format: "
+                            "'Department: <department name>' at the end. "
+                            "End your advice with: 'Consult a doctor if symptoms worsen.'"
+                        )
+                    }
+                ]
+
+            # ADD CHAT HISTORY
+            for chat in history:
+                messages.append({"role": "user", "content": chat.Message})
+                messages.append({"role": "assistant", "content": chat.botResponse})
+
+            # CURRENT USER MESSAGE
+            messages.append({
+                "role": "user",
+                "content": f"My symptoms are: {symptoms}"
+            })
+
+            # OPENROUTER API CALL
+            response = client.chat.completions.create(
+                model="mistralai/mistral-7b-instruct:free",
+                messages=messages,
+                temperature=0.3
+            )
+
+            if not response.choices:
+                return Response(
+                    {"error": "AI did not respond"},
+                    status=status.HTTP_503_SERVICE_UNAVAILABLE
+                )
+
+            bot_reply = response.choices[0].message.content.strip()
+            bot_reply = re.sub(r"<.*?>|\[.*?\]", "", bot_reply).strip()
+
+            # Extract department using exact "Department: ..." format
+            department_match = re.search(r"Department:\s*(.+)", bot_reply)
+            if department_match:
+                department = department_match.group(1).strip()
+            else:
+                department = "General Physician"  # fallback
+
+
+            # SAVE CHAT HISTORY
+            ChatBotModel.objects.create(
+                user=user,
+                Message=symptoms,
+                botResponse=bot_reply
+            )
+
+            return Response(
+                {
+                    "login_id": user.LOGIN.id,
+                    "symptoms": symptoms,
+                    "first_aid_advice": bot_reply,
+                    "department": department
+                },
+                status=status.HTTP_200_OK
+            )
+
+        except UserModel.DoesNotExist:
+            return Response(
+                {"error": "User not found for this login ID"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        except Exception as e:
+            print("ERROR:", e)
+            return Response(
+                {"error": "Internal server error"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+    # ---------------- GET : CHAT HISTORY ----------------
+    def get(self, request, user_id):
+        try:
+            user = UserModel.objects.get(LOGIN__id=user_id)
+
+            chats = ChatBotModel.objects.filter(
+                user=user
+            ).order_by("-timestamp")
+
+            history = [
+                {
+                    "message": chat.Message,
+                    "response": chat.botResponse,
+                    "time": chat.timestamp
+                }
+                for chat in chats
+            ]
+
+            return Response(
+                {"history": history},
+                status=status.HTTP_200_OK
+            )
+
+        except UserModel.DoesNotExist:
+            return Response(
+                {"error": "User not found"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+

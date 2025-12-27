@@ -92,7 +92,9 @@ urlpatterns = [
     path('requests',ViewBloodReq.as_view()),    
     path('acceptrequest/<int:id>',AcceptReq.as_view()),    
     path('history/<int:id>',ReqHistory.as_view()),    
-    path('alert', AddAlertApi.as_view())
+    path('alert', AddAlertApi.as_view()),
+    path("bot/<int:user_id>", ChatBotAPI.as_view()),
+
     
     
 

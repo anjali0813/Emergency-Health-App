@@ -182,3 +182,11 @@ class BloodDonationRequestModel(models.Model):
     VolunteerID = models.ForeignKey(VolunteerModel,on_delete=models.CASCADE, null=True, blank=True)
     Bloodgroup=models.CharField(max_length=100,null=True,blank=True)
     status=models.CharField(max_length=100,null=True,blank=True)
+
+
+class ChatBotModel(models.Model):
+    Message=models.CharField(max_length=500,null=True,blank=True)
+    botResponse=models.CharField(max_length=500,null=True,blank=True)
+    user=models.ForeignKey(UserModel,on_delete=models.CASCADE,null=True,blank=True)
+    timestamp=models.DateTimeField(auto_now_add=True)
+    

@@ -132,3 +132,9 @@ class PublicAlertSerializer(serializers.ModelSerializer):
     class Meta:
         model = AlertModel
         fields = "__all__"
+
+
+class ChatBotSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ChatBotModel
+        fields = "__all__"
